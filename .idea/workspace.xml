@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7d6ac818-2e45-41fc-bc9d-525ef54b6fdd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/auth/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/citizen/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/citizen/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/citizen/project/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/citizen/project/[id]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/mp/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/mp/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/behavioral-dna/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/behavioral-dna/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/case-files/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/case-files/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/case-replay/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/case-replay/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/command-center/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/command-center/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/evidence-verification/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/evidence-verification/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/forensic-reasoning/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/forensic-reasoning/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/network-intelligence/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/network-intelligence/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/official/peer-benchmarking/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/official/peer-benchmarking/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layouts/OfficialLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layouts/OfficialLayout.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3INHsThrCvpjYxgBTeoloS8947t" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "js.debugger.nextJs.config.created.client": "true",
+    "js.debugger.nextJs.config.created.server": "true",
+    "last_opened_file_path": "C:/Users/harle/OneDrive/Desktop/SIH/nirikshan",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="npm.Next.js: server-side">
+    <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="Next.js: server-side" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.32098.37" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.32098.37" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7d6ac818-2e45-41fc-bc9d-525ef54b6fdd" name="Changes" comment="" />
+      <created>1787598313886</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1787598313886</updated>
+      <workItem from="1787598315292" duration="12000" />
+    </task>
+    <servers />
+  </component>
+</project>

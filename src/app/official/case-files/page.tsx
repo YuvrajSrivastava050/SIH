@@ -51,7 +51,7 @@ function DossierModal({ project, onClose }: { project: typeof mockProjects[0]; o
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-[#080D1A]/90 backdrop-blur-xl px-6 py-4 border-b border-white/8 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-[#05141F]/90 backdrop-blur-xl px-6 py-4 border-b border-white/8 flex items-center justify-between z-10">
           <div>
             <div className="text-xs font-mono text-saffron mb-0.5">AUDIT CASE FILE / DOSSIER</div>
             <h2 className="font-display font-bold text-white text-lg">{project.name}</h2>
@@ -61,16 +61,16 @@ function DossierModal({ project, onClose }: { project: typeof mockProjects[0]; o
               Download PDF
             </button>
             <button onClick={onClose} className="p-2 rounded-lg hover:bg-white/5 transition-colors">
-              <X size={16} className="text-[#6B7A99]" />
+              <X size={16} className="text-[#7E9BB4]" />
             </button>
           </div>
         </div>
 
         {/* Project summary */}
         <div className="px-6 py-4 border-b border-white/5 grid grid-cols-3 gap-4 text-sm">
-          <div><div className="text-[#4B5568] text-xs">Case ID</div><div className="text-white font-mono">{project.id}</div></div>
-          <div><div className="text-[#4B5568] text-xs">Risk Score</div><div className={`font-mono font-bold ${riskColors[project.riskLevel]?.split(' ')[0]}`}>{project.riskScore}</div></div>
-          <div><div className="text-[#4B5568] text-xs">Amount</div><div className="text-white font-mono">₹{(project.amount / 100000).toFixed(1)}L</div></div>
+          <div><div className="text-[#56718A] text-xs">Case ID</div><div className="text-white font-mono">{project.id}</div></div>
+          <div><div className="text-[#56718A] text-xs">Risk Score</div><div className={`font-mono font-bold ${riskColors[project.riskLevel]?.split(' ')[0]}`}>{project.riskScore}</div></div>
+          <div><div className="text-[#56718A] text-xs">Amount</div><div className="text-white font-mono">₹{(project.amount / 100000).toFixed(1)}L</div></div>
         </div>
 
         {/* 12 sections */}
@@ -85,10 +85,10 @@ function DossierModal({ project, onClose }: { project: typeof mockProjects[0]; o
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-mono text-[#4B5568] w-5">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="text-xs font-mono text-[#56718A] w-5">{String(i + 1).padStart(2, '0')}</span>
                   <span className="text-sm font-medium text-white group-hover:text-saffron transition-colors">{section}</span>
                 </div>
-                <ChevronRight size={14} className="text-[#4B5568] group-hover:text-saffron transition-colors" />
+                <ChevronRight size={14} className="text-[#56718A] group-hover:text-saffron transition-colors" />
               </div>
             </motion.div>
           ))}
@@ -117,7 +117,7 @@ export default function CaseFilesPage() {
               <span className="text-xs font-mono text-danger tracking-widest">INVESTIGATION PRIORITY QUEUE</span>
             </div>
             <h1 className="font-display font-bold text-white text-3xl mb-1">Case Files</h1>
-            <p className="text-[#6B7A99] text-sm">Ranked by risk, evidence strength, and financial impact</p>
+            <p className="text-[#7E9BB4] text-sm">Ranked by risk, evidence strength, and financial impact</p>
           </div>
         </div>
 
@@ -128,7 +128,7 @@ export default function CaseFilesPage() {
               className={`px-4 py-2 rounded-xl text-sm font-medium capitalize whitespace-nowrap transition-all ${
                 filter === f
                   ? 'bg-saffron/15 border border-saffron/30 text-saffron'
-                  : 'border border-white/8 text-[#6B7A99] hover:text-white hover:border-white/20'
+                  : 'border border-white/8 text-[#7E9BB4] hover:text-white hover:border-white/20'
               }`}
             >
               {f === 'all' ? 'All Cases' : f}
@@ -150,7 +150,7 @@ export default function CaseFilesPage() {
                 {/* Priority rank */}
                 <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center">
                   <span className="font-mono font-bold text-lg" style={{
-                    color: i === 0 ? '#FF3B5C' : i === 1 ? '#FF6B00' : i === 2 ? '#FFD60A' : '#6B7A99'
+                    color: i === 0 ? '#FF4D6D' : i === 1 ? '#3ED6FF' : i === 2 ? '#FFC94D' : '#7E9BB4'
                   }}>
                     {i + 1}
                   </span>
@@ -161,7 +161,7 @@ export default function CaseFilesPage() {
                   <div className="flex items-start justify-between gap-4 flex-wrap">
                     <div>
                       <h3 className="font-semibold text-white">{project.name}</h3>
-                      <div className="text-xs text-[#6B7A99] font-mono mt-0.5">{project.id} · {project.constituency}</div>
+                      <div className="text-xs text-[#7E9BB4] font-mono mt-0.5">{project.id} · {project.constituency}</div>
                     </div>
                     <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded-full border flex-shrink-0 ${riskColors[project.riskLevel]}`}>
                       RISK: {project.riskScore}
@@ -170,11 +170,11 @@ export default function CaseFilesPage() {
 
                   <div className="flex items-center gap-6 mt-3 flex-wrap">
                     <div>
-                      <div className="text-xs text-[#4B5568]">Financial Exposure</div>
+                      <div className="text-xs text-[#56718A]">Financial Exposure</div>
                       <div className="text-sm font-mono font-bold text-white">₹{(project.amount / 100000).toFixed(1)}L</div>
                     </div>
                     <div>
-                      <div className="text-xs text-[#4B5568]">Evidence Strength</div>
+                      <div className="text-xs text-[#56718A]">Evidence Strength</div>
                       <div className="flex items-center gap-1 mt-1">
                         {evidenceDots(project.behavioralMatch).map((filled, j) => (
                           <div key={j} className={`w-2 h-2 rounded-full ${filled ? 'bg-saffron' : 'bg-white/10'}`} />
@@ -182,7 +182,7 @@ export default function CaseFilesPage() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-xs text-[#4B5568]">Behavioral Match</div>
+                      <div className="text-xs text-[#56718A]">Behavioral Match</div>
                       <div className="text-sm font-mono font-bold text-saffron">{project.behavioralMatch}%</div>
                     </div>
                     {project.flags && (
@@ -201,7 +201,7 @@ export default function CaseFilesPage() {
                     className="p-2 rounded-xl border border-white/8 hover:bg-white/5 transition-colors"
                     title="Open Case"
                   >
-                    <Eye size={14} className="text-[#A8B3CF]" />
+                    <Eye size={14} className="text-[#A3C2D9]" />
                   </Link>
                   <button
                     onClick={() => setDossierProject(project)}

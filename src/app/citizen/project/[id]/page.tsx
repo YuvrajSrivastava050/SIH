@@ -44,19 +44,19 @@ export default function ProjectJourneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#04070F] text-[#F0F4FF] pb-24">
+    <div className="min-h-screen bg-[#020A12] text-[#EAF7FF] pb-24">
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 bg-[#04070F]/90 backdrop-blur-xl border-b border-white/5 px-6 h-14 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[#020A12]/90 backdrop-blur-xl border-b border-white/5 px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link 
             href="/citizen/dashboard" 
-            className="p-1.5 rounded-lg border border-white/10 hover:bg-white/5 text-[#A8B3CF] hover:text-white transition-colors"
+            className="p-1.5 rounded-lg border border-white/10 hover:bg-white/5 text-[#A3C2D9] hover:text-white transition-colors"
           >
             <ArrowLeft size={16} />
           </Link>
           <div className="flex items-center gap-2">
             <span className="font-display font-bold text-white text-sm">NIRIKSHAN</span>
-            <span className="text-xs text-[#6B7A99] font-mono">/ Project Journey</span>
+            <span className="text-xs text-[#7E9BB4] font-mono">/ Project Journey</span>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -85,14 +85,14 @@ export default function ProjectJourneyPage() {
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-saffron/10 border border-saffron/30 text-saffron">
                   {project.id}
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-[#A8B3CF]">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-[#A3C2D9]">
                   {project.category}
                 </span>
               </div>
               <h1 className="font-display font-bold text-white text-2xl md:text-3xl mb-2">
                 {project.name}
               </h1>
-              <div className="flex flex-wrap items-center gap-4 text-xs text-[#A8B3CF]">
+              <div className="flex flex-wrap items-center gap-4 text-xs text-[#A3C2D9]">
                 <span className="flex items-center gap-1"><MapPin size={13} className="text-saffron" /> {project.constituency}, {project.state}</span>
                 <span className="flex items-center gap-1"><Building2 size={13} className="text-blue-400" /> {project.agency}</span>
                 <span className="flex items-center gap-1"><User size={13} className="text-purple-400" /> {project.contractor}</span>
@@ -102,7 +102,7 @@ export default function ProjectJourneyPage() {
             {/* Completion Ring Badge */}
             <div className="glass-sm rounded-2xl p-4 border border-white/10 flex items-center gap-4">
               <div className="text-right">
-                <div className="text-xs text-[#6B7A99] font-mono">COMPLETION</div>
+                <div className="text-xs text-[#7E9BB4] font-mono">COMPLETION</div>
                 <div className="text-2xl font-mono font-bold text-forensic">{project.completion}%</div>
               </div>
               <div className="w-12 h-12 rounded-full border-2 border-forensic/20 flex items-center justify-center relative">
@@ -114,20 +114,20 @@ export default function ProjectJourneyPage() {
           {/* Financial Breakdown Progress */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4 border-t border-white/5">
             <div>
-              <div className="text-xs text-[#6B7A99]">Approved Sanction</div>
+              <div className="text-xs text-[#7E9BB4]">Approved Sanction</div>
               <div className="text-base font-mono font-bold text-white">₹{(project.amount / 100000).toFixed(2)} Lakh</div>
             </div>
             <div>
-              <div className="text-xs text-[#6B7A99]">Disbursed to Date</div>
+              <div className="text-xs text-[#7E9BB4]">Disbursed to Date</div>
               <div className="text-base font-mono font-bold text-blue-400">₹{(project.spent / 100000).toFixed(2)} Lakh</div>
             </div>
             <div>
-              <div className="text-xs text-[#6B7A99]">Start Date</div>
-              <div className="text-base font-mono text-[#F0F4FF]">{project.startDate}</div>
+              <div className="text-xs text-[#7E9BB4]">Start Date</div>
+              <div className="text-base font-mono text-[#EAF7FF]">{project.startDate}</div>
             </div>
             <div>
-              <div className="text-xs text-[#6B7A99]">Target Completion</div>
-              <div className="text-base font-mono text-[#F0F4FF]">{project.expectedEnd}</div>
+              <div className="text-xs text-[#7E9BB4]">Target Completion</div>
+              <div className="text-base font-mono text-[#EAF7FF]">{project.expectedEnd}</div>
             </div>
           </div>
         </motion.div>
@@ -137,7 +137,7 @@ export default function ProjectJourneyPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-display font-bold text-white text-xl">Project Lifecycle Journey</h2>
-              <p className="text-xs text-[#6B7A99] mt-0.5">End-to-end transparent verification checkpoints from sanction to handover</p>
+              <p className="text-xs text-[#7E9BB4] mt-0.5">End-to-end transparent verification checkpoints from sanction to handover</p>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono text-forensic bg-forensic/10 border border-forensic/20 px-3 py-1 rounded-full">
               <ShieldCheck size={14} />
@@ -159,9 +159,9 @@ export default function ProjectJourneyPage() {
                 >
                   {/* Node icon */}
                   <div className={`absolute -left-[30px] md:-left-[35px] top-0 w-8 h-8 rounded-full flex items-center justify-center border-2 transition-transform duration-300 group-hover:scale-110 ${
-                    isCompleted ? 'bg-[#04070F] border-forensic text-forensic shadow-[0_0_12px_rgba(79,255,176,0.3)]' :
-                    isActive ? 'bg-saffron border-saffron text-white shadow-[0_0_16px_rgba(255,107,0,0.5)] animate-pulse' :
-                    'bg-[#080D1A] border-white/20 text-[#6B7A99]'
+                    isCompleted ? 'bg-[#020A12] border-forensic text-forensic shadow-[0_0_12px_rgba(53,240,200,0.3)]' :
+                    isActive ? 'bg-saffron border-saffron text-white shadow-[0_0_16px_rgba(62,214,255,0.5)] animate-pulse' :
+                    'bg-[#05141F] border-white/20 text-[#7E9BB4]'
                   }`}>
                     {isCompleted ? <CheckCircle2 size={15} /> :
                      isActive ? <Clock size={15} /> :
@@ -183,9 +183,9 @@ export default function ProjectJourneyPage() {
                           </span>
                         )}
                       </h3>
-                      <span className="text-xs font-mono text-[#A8B3CF]">{stage.date}</span>
+                      <span className="text-xs font-mono text-[#A3C2D9]">{stage.date}</span>
                     </div>
-                    <p className="text-sm text-[#A8B3CF] leading-relaxed">{stage.desc}</p>
+                    <p className="text-sm text-[#A3C2D9] leading-relaxed">{stage.desc}</p>
                   </div>
                 </motion.div>
               )
@@ -198,7 +198,7 @@ export default function ProjectJourneyPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-display font-bold text-white text-xl">Geo-tagged Ground Evidence</h2>
-              <p className="text-xs text-[#6B7A99] mt-0.5">High-resolution physical evidence submitted by contractors & verified by NIRIKSHAN AI</p>
+              <p className="text-xs text-[#7E9BB4] mt-0.5">High-resolution physical evidence submitted by contractors & verified by NIRIKSHAN AI</p>
             </div>
             <span className="text-xs font-mono text-saffron">{project.photos} Photos Verified</span>
           </div>
@@ -210,7 +210,7 @@ export default function ProjectJourneyPage() {
               { title: 'Roof Slab & Masonry Work', date: 'Nov 10, 2024', status: 'AI Match: 96%', tags: 'Solar Match Verified' },
             ].map((photo, i) => (
               <div key={i} className="glass-sm rounded-2xl border border-white/8 overflow-hidden group hover:border-saffron/40 transition-all duration-300">
-                <div className="h-44 bg-gradient-to-br from-white/5 via-[#080D1A] to-white/2 relative flex items-center justify-center overflow-hidden">
+                <div className="h-44 bg-gradient-to-br from-white/5 via-[#05141F] to-white/2 relative flex items-center justify-center overflow-hidden">
                   <Camera size={32} className="text-white/20 group-hover:scale-125 group-hover:text-saffron transition-all duration-500" />
                   <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-mono text-forensic border border-forensic/20">
                     {photo.status}
@@ -218,8 +218,8 @@ export default function ProjectJourneyPage() {
                 </div>
                 <div className="p-4 space-y-1">
                   <div className="font-semibold text-sm text-white">{photo.title}</div>
-                  <div className="text-xs text-[#6B7A99] font-mono">{photo.date}</div>
-                  <div className="text-[11px] text-[#A8B3CF] pt-1">{photo.tags}</div>
+                  <div className="text-xs text-[#7E9BB4] font-mono">{photo.date}</div>
+                  <div className="text-[11px] text-[#A3C2D9] pt-1">{photo.tags}</div>
                 </div>
               </div>
             ))}
@@ -242,7 +242,7 @@ export default function ProjectJourneyPage() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={e => e.stopPropagation()}
-              className="w-full max-w-lg glass rounded-3xl border border-purple-500/30 p-6 space-y-5 bg-[#080D1A]"
+              className="w-full max-w-lg glass rounded-3xl border border-purple-500/30 p-6 space-y-5 bg-[#05141F]"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
@@ -251,7 +251,7 @@ export default function ProjectJourneyPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-white text-base">Community Ground Reality Report</h3>
-                    <p className="text-xs text-[#6B7A99]">Your feedback becomes citizen evidence, not automatic accusation.</p>
+                    <p className="text-xs text-[#7E9BB4]">Your feedback becomes citizen evidence, not automatic accusation.</p>
                   </div>
                 </div>
               </div>
@@ -266,49 +266,49 @@ export default function ProjectJourneyPage() {
                     <CheckCircle2 size={24} />
                   </div>
                   <div className="font-display font-bold text-white text-lg">Report Submitted Successfully</div>
-                  <p className="text-xs text-[#A8B3CF] max-w-xs mx-auto">
+                  <p className="text-xs text-[#A3C2D9] max-w-xs mx-auto">
                     Evidence logged under Ticket #CIT-{Math.floor(1000 + Math.random() * 9000)}. NIRIKSHAN anomaly engine will cross-reference this with contractor logs.
                   </p>
                 </motion.div>
               ) : (
                 <form onSubmit={handleReportSubmit} className="space-y-4">
                   <div>
-                    <label className="text-xs font-mono text-[#A8B3CF] block mb-1.5">Observation Category</label>
+                    <label className="text-xs font-mono text-[#A3C2D9] block mb-1.5">Observation Category</label>
                     <select
                       value={reportType}
                       onChange={e => setReportType(e.target.value)}
                       className="w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-400"
                     >
-                      <option value="progress_conflict" className="bg-[#080D1A]">Progress does not match portal records (e.g. marked 72% but foundation only)</option>
-                      <option value="abandoned" className="bg-[#080D1A]">Work completely halted / site abandoned for &gt; 30 days</option>
-                      <option value="quality" className="bg-[#080D1A]">Substandard material / visible structural defect</option>
-                      <option value="location" className="bg-[#080D1A]">Project photo does not match this physical location</option>
+                      <option value="progress_conflict" className="bg-[#05141F]">Progress does not match portal records (e.g. marked 72% but foundation only)</option>
+                      <option value="abandoned" className="bg-[#05141F]">Work completely halted / site abandoned for &gt; 30 days</option>
+                      <option value="quality" className="bg-[#05141F]">Substandard material / visible structural defect</option>
+                      <option value="location" className="bg-[#05141F]">Project photo does not match this physical location</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="text-xs font-mono text-[#A8B3CF] block mb-1.5">Ground Description & Notes</label>
+                    <label className="text-xs font-mono text-[#A3C2D9] block mb-1.5">Ground Description & Notes</label>
                     <textarea
                       required
                       rows={3}
                       value={reportText}
                       onChange={e => setReportText(e.target.value)}
                       placeholder="E.g., Visited the site on Saturday. Boundary wall is missing and work has stopped for 3 weeks..."
-                      className="w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-[#4B5568] text-sm focus:outline-none focus:border-purple-400"
+                      className="w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-[#56718A] text-sm focus:outline-none focus:border-purple-400"
                     />
                   </div>
 
                   <div className="border-2 border-dashed border-white/10 hover:border-purple-400/40 rounded-2xl p-4 text-center cursor-pointer transition-colors">
                     <Upload size={20} className="mx-auto text-purple-400 mb-1" />
                     <div className="text-xs font-semibold text-white">Attach Site Photo with GPS location</div>
-                    <div className="text-[10px] text-[#6B7A99]">JPG, PNG or HEIC with EXIF metadata (Demo upload)</div>
+                    <div className="text-[10px] text-[#7E9BB4]">JPG, PNG or HEIC with EXIF metadata (Demo upload)</div>
                   </div>
 
                   <div className="flex items-center justify-end gap-3 pt-2">
                     <button
                       type="button"
                       onClick={() => setReportModalOpen(false)}
-                      className="px-4 py-2 rounded-xl text-xs text-[#A8B3CF] hover:text-white"
+                      className="px-4 py-2 rounded-xl text-xs text-[#A3C2D9] hover:text-white"
                     >
                       Cancel
                     </button>

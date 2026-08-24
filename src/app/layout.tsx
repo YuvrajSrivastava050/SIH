@@ -38,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${inter.variable}`}>
-      <body className="antialiased bg-[#04070F] text-[#F0F4FF]">
+      <body className="antialiased bg-[#020A12] text-[#EAF7FF]">
         {children}
       </body>
     </html>

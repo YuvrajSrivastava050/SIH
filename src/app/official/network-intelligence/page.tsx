@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Network, X, AlertTriangle, ChevronRight, Zap } from 'lucide-react'
@@ -11,8 +11,8 @@ const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false 
 
 const NODE_COLORS: Record<string, string> = {
   project:    '#3B82F6',
-  contractor: '#FF6B00',
-  agency:     '#9333EA',
+  contractor: '#3ED6FF',
+  agency:     '#6E8BFF',
   entity:     '#6B7280',
 }
 
@@ -24,20 +24,67 @@ const NODE_LABELS: Record<string, string> = {
 }
 
 type GraphNode = { id: string; label: string; type: string; risk: number }
+type PositionedGraphNode = GraphNode & { val: number; x?: number; y?: number }
 type GraphLink = { source: string; target: string; type: string }
+
+const CRIMSON = '#DC143C'
 
 export default function NetworkIntelligencePage() {
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null)
   const [highlightSuspicious, setHighlightSuspicious] = useState(false)
   const graphRef = useRef<any>(null)
+  const pulsePhase = useRef(0)
 
-  const graphData = {
+  const graphData: { nodes: PositionedGraphNode[]; links: typeof networkGraphData.links } = {
     nodes: networkGraphData.nodes.map(n => ({ ...n, val: n.risk / 20 + 3 })),
     links: networkGraphData.links,
   }
 
+  const fitGraph = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      const liveGraphData = graphRef.current?.graphData?.()
+      const positionedNodes = (liveGraphData?.nodes ?? []).filter(
+        (node: PositionedGraphNode) => node.x != null && node.y != null,
+      )
+      graphRef.current?.zoomToFit(600, 80)
+      if (positionedNodes.length) {
+        const bounds = positionedNodes.reduce(
+          (current: { minX: number; maxX: number; minY: number; maxY: number }, node: PositionedGraphNode) => ({
+            minX: Math.min(current.minX, node.x as number),
+            maxX: Math.max(current.maxX, node.x as number),
+            minY: Math.min(current.minY, node.y as number),
+            maxY: Math.max(current.maxY, node.y as number),
+          }),
+          { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity },
+        )
+        graphRef.current?.centerAt((bounds.minX + bounds.maxX) / 2, (bounds.minY + bounds.maxY) / 2, 600)
+      }
+    })
+  }, [graphData])
+
+  useEffect(() => {
+    let frame: number
+    const tick = () => {
+      pulsePhase.current += 0.04
+      const refresh = graphRef.current?.refresh
+      if (typeof refresh === 'function') refresh()
+      frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
+  useEffect(() => {
+    const fitTimer = window.setTimeout(fitGraph, 1400)
+    return () => window.clearTimeout(fitTimer)
+  }, [fitGraph])
+
   const handleNodeClick = useCallback((node: any) => {
     setSelectedNode(node as GraphNode)
+    if (graphRef.current && node.x != null && node.y != null) {
+      graphRef.current.centerAt(node.x, node.y, 800)
+      graphRef.current.zoom(2.2, 800)
+    }
   }, [])
 
   const nodeCanvasObject = useCallback((node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
@@ -49,7 +96,7 @@ export default function NetworkIntelligencePage() {
     // Glow for high risk
     if (node.risk > 70) {
       ctx.shadowBlur = 16
-      ctx.shadowColor = node.type === 'entity' ? '#FF3B5C' : color
+      ctx.shadowColor = node.type === 'entity' ? '#FF4D6D' : color
     }
 
     // Node circle
@@ -66,7 +113,7 @@ export default function NetworkIntelligencePage() {
 
     // Label
     ctx.font = `${fontSize}px JetBrains Mono`
-    ctx.fillStyle = '#A8B3CF'
+    ctx.fillStyle = '#A3C2D9'
     ctx.textAlign = 'center'
     ctx.fillText(label, node.x, node.y + r + fontSize + 2)
   }, [highlightSuspicious])
@@ -81,14 +128,17 @@ export default function NetworkIntelligencePage() {
     ctx.moveTo(start.x, start.y)
     ctx.lineTo(end.x, end.y)
 
-    if (suspicious && highlightSuspicious) {
-      ctx.strokeStyle = 'rgba(255,59,92,0.8)'
-      ctx.lineWidth = 2
-      ctx.setLineDash([4, 3])
-      ctx.shadowBlur = 8
-      ctx.shadowColor = '#FF3B5C'
+    const pulse = 0.5 + 0.5 * Math.sin(pulsePhase.current)
+
+    if (suspicious) {
+      const alpha = highlightSuspicious ? 0.55 + pulse * 0.45 : 0.35 + pulse * 0.35
+      ctx.strokeStyle = `rgba(220, 20, 60, ${alpha})`
+      ctx.lineWidth = highlightSuspicious ? 1.5 + pulse * 2.5 : 1 + pulse * 1.5
+      ctx.setLineDash(highlightSuspicious ? [5, 3] : [4, 4])
+      ctx.shadowBlur = 6 + pulse * 14
+      ctx.shadowColor = CRIMSON
     } else {
-      ctx.strokeStyle = suspicious ? 'rgba(255,59,92,0.3)' : 'rgba(255,255,255,0.12)'
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)'
       ctx.lineWidth = 1
       ctx.setLineDash([])
       ctx.shadowBlur = 0
@@ -107,7 +157,7 @@ export default function NetworkIntelligencePage() {
 
   return (
     <OfficialLayout activeHref="/official/network-intelligence">
-      <div className="p-6 lg:p-8 space-y-6">
+      <div className="px-8 lg:px-12 xl:px-14 py-6 lg:py-8 space-y-6">
 
         {/* Header */}
         <div className="flex items-start justify-between">
@@ -117,7 +167,7 @@ export default function NetworkIntelligencePage() {
               <span className="text-xs font-mono text-purple-400 tracking-widest">NETWORK INTELLIGENCE</span>
             </div>
             <h1 className="font-display font-bold text-white text-3xl mb-1">Entity Relationship Graph</h1>
-            <p className="text-[#6B7A99] text-sm">Map hidden connections between projects, contractors, agencies, and entities</p>
+            <p className="text-[#7E9BB4] text-sm">Map hidden connections between projects, contractors, agencies, and entities</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -126,7 +176,7 @@ export default function NetworkIntelligencePage() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold transition-all ${
                 highlightSuspicious
                   ? 'border-danger/40 bg-danger/10 text-danger'
-                  : 'border-white/10 text-[#A8B3CF] hover:bg-white/5'
+                  : 'border-white/10 text-[#A3C2D9] hover:bg-white/5'
               }`}
             >
               <Zap size={14} />
@@ -145,7 +195,7 @@ export default function NetworkIntelligencePage() {
               className="glass rounded-xl border border-danger/25 bg-danger/5 p-4 flex items-center gap-3"
             >
               <AlertTriangle size={18} className="text-danger flex-shrink-0" />
-              <p className="text-sm text-[#A8B3CF]">
+              <p className="text-sm text-[#A3C2D9]">
                 <span className="text-danger font-semibold">Suspicious path highlighted:</span>{' '}
                 PRJ-1203 → Delta Infrastructure → Shell Entity (JK Pvt.) → PWD Lucknow → PRJ-0782.
                 This chain suggests possible payment routing through an intermediary entity.
@@ -158,7 +208,7 @@ export default function NetworkIntelligencePage() {
         <div className="grid lg:grid-cols-4 gap-6">
 
           {/* Force Graph */}
-          <div className="lg:col-span-3 glass rounded-2xl border border-white/5 overflow-hidden relative" style={{ height: 520 }}>
+          <div className="lg:col-span-3 glass rounded-2xl border border-white/5 overflow-hidden relative mx-0" style={{ height: 520 }}>
             {/* @ts-ignore */}
             <ForceGraph2D
               ref={graphRef}
@@ -170,6 +220,7 @@ export default function NetworkIntelligencePage() {
               linkDirectionalArrowLength={4}
               linkDirectionalArrowRelPos={0.85}
               cooldownTicks={80}
+              onEngineStop={fitGraph}
               nodePointerAreaPaint={(node: any, color: string, ctx: CanvasRenderingContext2D) => {
                 const r = (node.risk / 20 + 3) * 1.5 + 4
                 ctx.fillStyle = color
@@ -180,11 +231,11 @@ export default function NetworkIntelligencePage() {
             />
 
             {/* Legend */}
-            <div className="absolute bottom-4 left-4 glass-sm rounded-xl p-3 flex flex-col gap-1.5">
+            <div className="absolute bottom-4 left-5 glass-sm rounded-xl px-4 py-3 flex flex-col gap-1.5">
               {Object.entries(NODE_COLORS).map(([type, color]) => (
                 <div key={type} className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
-                  <span className="text-xs text-[#6B7A99] font-mono capitalize">{NODE_LABELS[type]}</span>
+                  <span className="text-xs text-[#7E9BB4] font-mono capitalize">{NODE_LABELS[type]}</span>
                 </div>
               ))}
               <div className="border-t border-white/10 mt-1 pt-1">
@@ -194,13 +245,13 @@ export default function NetworkIntelligencePage() {
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
                   <div className="w-6 h-px border-t border-white/30" />
-                  <span className="text-xs text-[#6B7A99] font-mono">Normal</span>
+                  <span className="text-xs text-[#7E9BB4] font-mono">Normal</span>
                 </div>
               </div>
             </div>
 
             {/* Click hint */}
-            <div className="absolute top-4 left-4 text-xs text-[#4B5568] font-mono">
+            <div className="absolute top-4 left-5 text-xs text-[#56718A] font-mono">
               Click any node to inspect
             </div>
           </div>
@@ -214,15 +265,15 @@ export default function NetworkIntelligencePage() {
                   initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 16 }}
-                  className="glass rounded-2xl border border-white/8 p-5 h-full"
+                  className="glass rounded-2xl border border-white/8 px-5 lg:px-6 py-5 h-full"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: NODE_COLORS[selectedNode.type] }} />
-                      <span className="text-xs font-mono text-[#6B7A99] capitalize">{selectedNode.type}</span>
+                      <span className="text-xs font-mono text-[#7E9BB4] capitalize">{selectedNode.type}</span>
                     </div>
                     <button onClick={() => setSelectedNode(null)} className="p-1 hover:bg-white/5 rounded-lg transition-colors">
-                      <X size={12} className="text-[#6B7A99]" />
+                      <X size={12} className="text-[#7E9BB4]" />
                     </button>
                   </div>
 
@@ -232,14 +283,14 @@ export default function NetworkIntelligencePage() {
 
                   {/* Risk */}
                   <div className="mb-4">
-                    <div className="text-xs text-[#4B5568] mb-1.5">Risk Level</div>
+                    <div className="text-xs text-[#56718A] mb-1.5">Risk Level</div>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 bg-white/5 rounded-full h-1.5">
                         <div
                           className="h-full rounded-full"
                           style={{
                             width: `${selectedNode.risk}%`,
-                            backgroundColor: selectedNode.risk > 75 ? '#FF3B5C' : selectedNode.risk > 50 ? '#FFD60A' : '#4FFFB0',
+                            backgroundColor: selectedNode.risk > 75 ? '#FF4D6D' : selectedNode.risk > 50 ? '#FFC94D' : '#35F0C8',
                           }}
                         />
                       </div>
@@ -251,7 +302,7 @@ export default function NetworkIntelligencePage() {
 
                   {/* Connections */}
                   <div className="mb-4">
-                    <div className="text-xs text-[#4B5568] mb-2">Connections</div>
+                    <div className="text-xs text-[#56718A] mb-2">Connections</div>
                     <div className="space-y-1.5">
                       {networkGraphData.links
                         .filter(l => l.source === selectedNode.id || l.target === selectedNode.id)
@@ -261,7 +312,7 @@ export default function NetworkIntelligencePage() {
                           return (
                             <div key={i} className="flex items-center gap-2 text-xs">
                               <div className={`w-1.5 h-1.5 rounded-full ${link.type === 'suspicious' ? 'bg-danger' : 'bg-white/30'}`} />
-                              <span className="text-[#A8B3CF]">{otherNode?.label.split('\n')[0]}</span>
+                              <span className="text-[#A3C2D9]">{otherNode?.label.split('\n')[0]}</span>
                               {link.type === 'suspicious' && (
                                 <span className="text-danger font-mono text-[10px]">⚠</span>
                               )}
@@ -280,12 +331,12 @@ export default function NetworkIntelligencePage() {
                   key="empty"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="glass rounded-2xl border border-white/5 p-5 h-full flex flex-col items-center justify-center text-center gap-4"
+                  className="glass rounded-2xl border border-white/5 px-5 lg:px-6 py-5 h-full flex flex-col items-center justify-center text-center gap-4"
                 >
                   <Network size={32} className="text-white/10" />
                   <div>
-                    <div className="text-sm text-[#6B7A99] font-medium">Click a node</div>
-                    <div className="text-xs text-[#4B5568] mt-1">to inspect entity details and connections</div>
+                    <div className="text-sm text-[#7E9BB4] font-medium">Click a node</div>
+                    <div className="text-xs text-[#56718A] mt-1">to inspect entity details and connections</div>
                   </div>
                 </motion.div>
               )}
@@ -306,10 +357,10 @@ export default function NetworkIntelligencePage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
-              className="glass rounded-xl p-4 border border-white/5"
+              className="glass rounded-xl px-5 py-4 border border-white/5"
             >
               <div className={`text-2xl font-bold font-mono ${s.color}`}>{s.value}</div>
-              <div className="text-xs text-[#6B7A99] mt-1">{s.label}</div>
+              <div className="text-xs text-[#7E9BB4] mt-1">{s.label}</div>
             </motion.div>
           ))}
         </div>

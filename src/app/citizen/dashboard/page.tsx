@@ -30,12 +30,12 @@ function ProjectCard({ project }: { project: typeof mockProjects[0] }) {
           <span className={`w-1.5 h-1.5 rounded-full ${sc.dot} inline-block mr-1.5`} />
           {sc.label}
         </span>
-        <span className="text-xs font-mono text-[#4B5568]">{project.id}</span>
+        <span className="text-xs font-mono text-[#56718A]">{project.id}</span>
       </div>
 
       <h3 className="font-semibold text-white text-base group-hover:text-saffron transition-colors mb-1 leading-snug">{project.name}</h3>
 
-      <div className="flex items-center gap-1.5 text-xs text-[#6B7A99] mb-3">
+      <div className="flex items-center gap-1.5 text-xs text-[#7E9BB4] mb-3">
         <MapPin size={11} />
         {project.constituency}, {project.state}
       </div>
@@ -43,7 +43,7 @@ function ProjectCard({ project }: { project: typeof mockProjects[0] }) {
       {/* Progress bar */}
       <div className="mb-3">
         <div className="flex justify-between text-xs mb-1">
-          <span className="text-[#4B5568]">Completion</span>
+          <span className="text-[#56718A]">Completion</span>
           <span className="font-mono text-white">{project.completion}%</span>
         </div>
         <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
@@ -92,10 +92,10 @@ export default function CitizenDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#04070F]">
+    <div className="min-h-screen bg-[#020A12]">
 
       {/* Navbar */}
-      <div className="sticky top-0 z-40 bg-[#04070F]/90 backdrop-blur-xl border-b border-white/5 px-6 h-14 flex items-center justify-between">
+      <div className="sticky top-0 z-40 bg-[#020A12]/90 backdrop-blur-xl border-b border-white/5 px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center">
             <span className="text-white font-bold text-xs">N</span>
@@ -103,7 +103,7 @@ export default function CitizenDashboard() {
           <span className="font-display font-bold text-white text-sm">NIRIKSHAN</span>
           <span className="text-xs font-mono text-blue-400 border border-blue-400/25 px-2 py-0.5 rounded-full">CITIZEN</span>
         </div>
-        <Link href="/auth/login" className="text-xs text-[#6B7A99] hover:text-white transition-colors">Switch Role</Link>
+        <Link href="/auth/login" className="text-xs text-[#7E9BB4] hover:text-white transition-colors">Switch Role</Link>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
@@ -114,7 +114,7 @@ export default function CitizenDashboard() {
           <h1 className="font-display font-bold text-white text-3xl mb-1">
             Where is the money going?
           </h1>
-          <p className="text-[#6B7A99]">
+          <p className="text-[#7E9BB4]">
             Track MPLADS fund utilization in {constituency.name}. See every project, its status, and its journey.
           </p>
         </motion.div>
@@ -137,7 +137,7 @@ export default function CitizenDashboard() {
               <c.icon size={18} className={c.color} />
               <div>
                 <div className={`text-xl font-bold font-mono ${c.color}`}>{c.value}</div>
-                <div className="text-xs text-[#6B7A99]">{c.label}</div>
+                <div className="text-xs text-[#7E9BB4]">{c.label}</div>
               </div>
             </motion.div>
           ))}
@@ -145,7 +145,7 @@ export default function CitizenDashboard() {
 
         {/* Status legend */}
         <div className="flex items-center gap-4 flex-wrap text-xs">
-          <span className="text-[#4B5568] font-mono">Project Status:</span>
+          <span className="text-[#56718A] font-mono">Project Status:</span>
           {Object.entries(statusConfig).map(([key, sc]) => (
             <div key={key} className="flex items-center gap-1.5">
               <div className={`w-2 h-2 rounded-full ${sc.dot}`} />
@@ -157,13 +157,13 @@ export default function CitizenDashboard() {
         {/* Search + Filter */}
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#4B5568]" />
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#56718A]" />
             <input
               type="text"
               placeholder="Search projects, constituencies..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 glass rounded-xl border border-white/8 text-white placeholder-[#4B5568] text-sm focus:outline-none focus:border-saffron/40 transition-colors bg-transparent"
+              className="w-full pl-10 pr-4 py-3 glass rounded-xl border border-white/8 text-white placeholder-[#56718A] text-sm focus:outline-none focus:border-saffron/40 transition-colors bg-transparent"
             />
           </div>
           <div className="flex gap-2 overflow-x-auto">
@@ -175,7 +175,7 @@ export default function CitizenDashboard() {
                   filterStatus === status
                     ? status === 'all' ? 'bg-saffron/15 border border-saffron/30 text-saffron'
                       : `${statusConfig[status as keyof typeof statusConfig]?.bg} ${statusConfig[status as keyof typeof statusConfig]?.color} border`
-                    : 'border border-white/8 text-[#6B7A99] hover:text-white'
+                    : 'border border-white/8 text-[#7E9BB4] hover:text-white'
                 }`}
               >
                 {status !== 'all' && <span className={`w-1.5 h-1.5 rounded-full ${statusConfig[status as keyof typeof statusConfig]?.dot}`} />}
@@ -196,7 +196,7 @@ export default function CitizenDashboard() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-16 text-[#4B5568]">
+          <div className="text-center py-16 text-[#56718A]">
             <Search size={32} className="mx-auto mb-3 opacity-30" />
             <div>No projects found</div>
           </div>
@@ -206,7 +206,7 @@ export default function CitizenDashboard() {
         <div className="glass rounded-2xl border border-purple-400/20 bg-purple-400/5 p-6 flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-white mb-1">Something doesn't look right? 🤔</h3>
-            <p className="text-sm text-[#A8B3CF]">Submit a photo, location, or description. Your report becomes community evidence.</p>
+            <p className="text-sm text-[#A3C2D9]">Submit a photo, location, or description. Your report becomes community evidence.</p>
           </div>
           <button className="flex-shrink-0 px-5 py-2.5 rounded-xl bg-purple-400/15 border border-purple-400/30 text-purple-300 font-semibold text-sm hover:bg-purple-400/25 transition-colors">
             Report Issue

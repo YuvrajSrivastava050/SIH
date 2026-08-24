@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Activity, Shield, BarChart2, Network, FileSearch,
   Eye, Clock, AlertTriangle, ChevronLeft, ChevronRight,
-  Home, LogOut, User
+  Home, User
 } from 'lucide-react'
 
 const navItems = [
@@ -33,16 +33,16 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
   const isActive = (href: string) => pathname === href || activeHref === href
 
   return (
-    <div className="min-h-screen bg-[#04070F] flex">
+    <div className="min-h-screen bg-[#020A12] flex">
 
       {/* ── Sidebar ─────────────────────────────────────────── */}
       <motion.aside
         animate={{ width: collapsed ? 72 : 256 }}
         transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="relative flex-shrink-0 flex flex-col border-r border-white/5 bg-[#080D1A]"
+        className="relative flex-shrink-0 flex flex-col border-r border-sky-400/8 bg-[#041019]/95 backdrop-blur-xl z-40"
       >
         {/* Header */}
-        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} px-4 py-5 border-b border-white/5`}>
+        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} px-4 py-5 border-b border-sky-400/8`}>
           <AnimatePresence>
             {!collapsed && (
               <motion.div
@@ -51,8 +51,8 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
                 exit={{ opacity: 0, x: -10 }}
                 className="flex items-center gap-2.5"
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-bold text-xs font-mono">N</span>
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-saffron to-forensic flex items-center justify-center flex-shrink-0 shadow-[0_0_14px_rgba(62,214,255,0.3)]">
+                  <span className="text-[#02141d] font-bold text-xs font-mono">N</span>
                 </div>
                 <div>
                   <div className="font-display font-bold text-white text-sm">NIRIKSHAN</div>
@@ -63,18 +63,18 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
           </AnimatePresence>
 
           {collapsed && (
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xs font-mono">N</span>
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-saffron to-forensic flex items-center justify-center">
+              <span className="text-[#02141d] font-bold text-xs font-mono">N</span>
             </div>
           )}
 
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
+            className="p-1.5 rounded-lg hover:bg-sky-400/10 transition-colors"
           >
             {collapsed
-              ? <ChevronRight size={14} className="text-[#6B7A99]" />
-              : <ChevronLeft size={14} className="text-[#6B7A99]" />
+              ? <ChevronRight size={14} className="text-[#56718A]" />
+              : <ChevronLeft size={14} className="text-[#56718A]" />
             }
           </button>
         </div>
@@ -89,8 +89,8 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative
                   ${active
-                    ? 'bg-saffron/10 border border-saffron/20 text-saffron'
-                    : 'text-[#6B7A99] hover:text-white hover:bg-white/5 border border-transparent'
+                    ? 'bg-saffron/12 border border-saffron/25 text-saffron-light'
+                    : 'text-[#6E8BA3] hover:text-white hover:bg-sky-400/8 border border-transparent'
                   }`}
               >
                 <item.icon size={17} className={`flex-shrink-0 transition-transform ${active ? 'text-saffron' : 'group-hover:text-white group-hover:scale-110'}`} />
@@ -112,7 +112,7 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
                   <span className={`ml-auto text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full flex-shrink-0
                     ${item.badge === 'NEW' ? 'bg-forensic/15 text-forensic border border-forensic/25' :
                       item.badge === 'HOT' ? 'bg-danger/15 text-danger border border-danger/25' :
-                      'bg-white/8 text-[#6B7A99]'}`}
+                      'bg-sky-400/10 text-[#7E9BB4] border border-sky-400/15'}`}
                   >
                     {item.badge}
                   </span>
@@ -122,7 +122,7 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
                 {active && (
                   <motion.div
                     layoutId="active-indicator"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-saffron rounded-r-full"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-saffron rounded-r-full shadow-[0_0_8px_rgba(62,214,255,0.8)]"
                   />
                 )}
               </Link>
@@ -131,12 +131,12 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-white/5 p-3 space-y-1">
-          <Link href="/" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#6B7A99] hover:text-white hover:bg-white/5 transition-all duration-200`}>
+        <div className="border-t border-sky-400/8 p-3 space-y-1">
+          <Link href="/" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#6E8BA3] hover:text-white hover:bg-sky-400/8 transition-all duration-200`}>
             <Home size={16} className="flex-shrink-0" />
             {!collapsed && <span className="text-sm">Home</span>}
           </Link>
-          <Link href="/auth/login" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#6B7A99] hover:text-white hover:bg-white/5 transition-all duration-200`}>
+          <Link href="/auth/login" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#6E8BA3] hover:text-white hover:bg-sky-400/8 transition-all duration-200`}>
             <User size={16} className="flex-shrink-0" />
             {!collapsed && <span className="text-sm">Switch Role</span>}
           </Link>
@@ -144,13 +144,7 @@ export default function OfficialLayout({ children, activeHref }: OfficialLayoutP
       </motion.aside>
 
       {/* ── Main Content ─────────────────────────────────────── */}
-      <main className="flex-1 min-w-0 overflow-y-auto">
-        {/* Scanline overlay */}
-        <div className="fixed inset-0 pointer-events-none z-10"
-          style={{
-            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px)',
-          }}
-        />
+      <main className="flex-1 min-w-0 overflow-y-auto relative scanlines">
         {children}
       </main>
     </div>

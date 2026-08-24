@@ -14,7 +14,7 @@ const BarTooltip = ({ active, payload }: any) => {
   if (active && payload?.length) {
     return (
       <div className="glass rounded-xl px-3 py-2 border border-white/10 text-xs">
-        <p className="text-white font-semibold">{payload[0]?.payload?.factor}</p>
+        <p className="text-[#EAF7FF] font-semibold">{payload[0]?.payload?.factor}</p>
         <p className="font-mono" style={{ color: payload[0]?.payload?.color }}>+{payload[0]?.value} pts</p>
       </div>
     )
@@ -28,6 +28,7 @@ export default function CaseReplayPage() {
   const [earlyWarningShown, setEarlyWarningShown] = useState(false)
   const [earlyWarningDismissed, setEarlyWarningDismissed] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const audioContextRef = useRef<AudioContext | null>(null)
 
   const yearData = caseReplayData.timeline[selectedYear as keyof typeof caseReplayData.timeline]
   const isWarningYear = selectedYear === caseReplayData.warningYear
@@ -68,6 +69,31 @@ export default function CaseReplayPage() {
     setEarlyWarningDismissed(true)
   }
 
+  const playScrubCue = (year: number) => {
+    if (typeof window === 'undefined') return
+    const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!AudioContextClass) return
+    const audioContext = audioContextRef.current ?? new AudioContextClass()
+    audioContextRef.current = audioContext
+    const oscillator = audioContext.createOscillator()
+    const gain = audioContext.createGain()
+    const nearWarning = Math.abs(year - caseReplayData.warningYear) <= 1
+    oscillator.frequency.value = nearWarning ? 520 : 300
+    gain.gain.setValueAtTime(0.0001, audioContext.currentTime)
+    gain.gain.exponentialRampToValueAtTime(nearWarning ? 0.045 : 0.018, audioContext.currentTime + 0.01)
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.09)
+    oscillator.connect(gain)
+    gain.connect(audioContext.destination)
+    oscillator.start()
+    oscillator.stop(audioContext.currentTime + 0.1)
+  }
+
+  const handleYearChange = (year: number) => {
+    setSelectedYear(year)
+    playScrubCue(year)
+    if (year !== caseReplayData.warningYear) setEarlyWarningDismissed(false)
+  }
+
   return (
     <OfficialLayout activeHref="/official/case-replay">
       <div className="p-6 lg:p-8 space-y-8 relative">
@@ -89,7 +115,7 @@ export default function CaseReplayPage() {
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                 className="relative glass rounded-3xl border-2 border-danger/50 p-10 max-w-lg mx-4 text-center"
                 onClick={e => e.stopPropagation()}
-                style={{ boxShadow: '0 0 80px rgba(255,59,92,0.4), 0 0 160px rgba(255,59,92,0.15)' }}
+                style={{ boxShadow: '0 0 80px rgba(255,77,109,0.4), 0 0 160px rgba(255,77,109,0.15)' }}
               >
                 {/* Pulsing ring */}
                 <div className="absolute inset-0 rounded-3xl border-2 border-danger/30 animate-pulse" />
@@ -103,11 +129,11 @@ export default function CaseReplayPage() {
                 </motion.div>
 
                 <div className="text-danger font-mono text-xs tracking-widest mb-2">NIRIKSHAN EARLY WARNING SYSTEM</div>
-                <h2 className="font-display font-bold text-white text-3xl mb-4">
+                <h2 className="font-display font-bold text-[#EAF7FF] text-3xl mb-4">
                   EARLY WARNING TRIGGERED
                 </h2>
-                <p className="text-[#A8B3CF] text-sm mb-3">
-                  At this point in time (<strong className="text-white">2018</strong>), NIRIKSHAN would have surfaced these indicators for investigation:
+                <p className="text-[#A3C2D9] text-sm mb-3">
+                  At this point in time (<strong className="text-[#EAF7FF]">2018</strong>), NIRIKSHAN would have surfaced these indicators for investigation:
                 </p>
 
                 <div className="space-y-2 text-left mb-6">
@@ -120,14 +146,14 @@ export default function CaseReplayPage() {
                       className="flex items-center gap-2 text-sm"
                     >
                       <AlertTriangle size={12} className="text-danger flex-shrink-0" />
-                      <span className="text-[#A8B3CF]">{ind}</span>
+                      <span className="text-[#A3C2D9]">{ind}</span>
                     </motion.div>
                   ))}
                 </div>
 
                 <div className="glass rounded-xl border border-danger/20 p-3 mb-5">
                   <span className="text-danger font-mono text-sm font-bold">Risk Score: </span>
-                  <span className="text-white font-mono text-2xl font-bold">79</span>
+                  <span className="text-[#EAF7FF] font-mono text-2xl font-bold">79</span>
                 </div>
 
                 <button
@@ -136,7 +162,7 @@ export default function CaseReplayPage() {
                 >
                   View Full Breakdown
                 </button>
-                <p className="text-xs text-[#4B5568] mt-3">Click outside to dismiss</p>
+                <p className="text-xs text-[#56718A] mt-3">Click outside to dismiss</p>
               </motion.div>
             </motion.div>
           )}
@@ -148,40 +174,40 @@ export default function CaseReplayPage() {
             <Clock size={16} className="text-danger" />
             <span className="text-xs font-mono text-danger tracking-widest">HISTORICAL CASE REPLAY LAB</span>
           </div>
-          <h1 className="font-display font-bold text-white text-3xl mb-1">Historical Case Replay</h1>
-          <p className="text-[#6B7A99] text-sm">Turn back the clock. See what NIRIKSHAN would have found — and when.</p>
+          <h1 className="font-display font-bold text-[#EAF7FF] text-3xl mb-1">Historical Case Replay</h1>
+          <p className="text-[#7E9BB4] text-sm">Turn back the clock. See what NIRIKSHAN would have found — and when.</p>
         </div>
 
         {/* Case Banner */}
         <div className="glass rounded-2xl border border-white/8 p-5 flex items-center justify-between">
           <div>
-            <div className="text-xs font-mono text-[#4B5568] mb-1">SELECTED CASE</div>
-            <h2 className="font-display font-bold text-white text-lg">{caseReplayData.title}</h2>
-            <p className="text-sm text-[#6B7A99] mt-1">{caseReplayData.description}</p>
+            <div className="text-xs font-mono text-[#56718A] mb-1">SELECTED CASE</div>
+            <h2 className="font-display font-bold text-[#EAF7FF] text-lg">{caseReplayData.title}</h2>
+            <p className="text-sm text-[#7E9BB4] mt-1">{caseReplayData.description}</p>
           </div>
           <div className="flex flex-col gap-2 text-right flex-shrink-0 ml-6">
-            <div className="text-xs text-[#4B5568]">Potential exposure</div>
+            <div className="text-xs text-[#56718A]">Potential exposure</div>
             <div className="text-xl font-bold font-mono text-danger">₹3.2 Cr</div>
-            <div className="text-xs text-[#4B5568]">Time saved: <span className="text-forensic">{caseReplayData.timeSaved}</span></div>
+            <div className="text-xs text-[#56718A]">Time saved: <span className="text-forensic">{caseReplayData.timeSaved}</span></div>
           </div>
         </div>
 
         {/* ── Timeline Scrubber ─────────────────────────────── */}
         <div className="glass rounded-2xl border border-white/5 p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-semibold text-white text-sm flex items-center gap-2">
+            <h2 className="font-semibold text-[#EAF7FF] text-sm flex items-center gap-2">
               <Clock size={14} className="text-saffron" /> Timeline Scrubber
             </h2>
             <div className="flex items-center gap-2">
               <button onClick={handleReset} className="p-2 rounded-lg border border-white/10 hover:bg-white/5 transition-colors">
-                <SkipBack size={14} className="text-[#A8B3CF]" />
+                <SkipBack size={14} className="text-[#A3C2D9]" />
               </button>
               <button
                 onClick={() => setPlaying(!playing)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                   playing
                     ? 'bg-danger/15 border border-danger/30 text-danger'
-                    : 'bg-saffron text-white hover:bg-saffron-light'
+                    : 'bg-saffron text-[#02141d] hover:bg-saffron-light'
                 }`}
               >
                 {playing ? <><Pause size={14} /> Pause</> : <><Play size={14} /> Play Timeline</>}
@@ -201,48 +227,36 @@ export default function CaseReplayPage() {
 
             <div className="relative flex justify-between px-2">
               {YEARS.map(year => {
-                const data = caseReplayData.timeline[year as keyof typeof caseReplayData.timeline]
-                const isActive = selectedYear === year
-                const isPast = year < selectedYear
                 const isWarn = year === caseReplayData.warningYear
 
                 return (
-                  <button
+                  <div
                     key={year}
-                    onClick={() => {
-                      setSelectedYear(year)
-                      if (year !== caseReplayData.warningYear) setEarlyWarningDismissed(false)
-                    }}
-                    className="flex flex-col items-center gap-2 group"
+                    className="flex flex-col items-center gap-2"
                   >
-                    <motion.div
-                      animate={{
-                        scale: isActive ? 1.3 : 1,
-                        backgroundColor: isActive ? (isWarn ? '#FF3B5C' : '#FF6B00') :
-                          isPast ? '#4FFFB0' : 'rgba(255,255,255,0.1)',
-                      }}
-                      className={`w-4 h-4 rounded-full border-2 transition-all duration-300 z-10
-                        ${isWarn && isActive ? 'animate-pulse-danger border-danger/60' : ''}
-                        ${isActive && !isWarn ? 'border-saffron/60' : ''}
-                        ${isPast && !isActive ? 'border-forensic/40' : ''}
-                        ${!isPast && !isActive ? 'border-white/20' : ''}
-                      `}
-                    />
-                    <div className={`text-xs font-mono font-bold transition-colors ${
-                      isActive ? 'text-white' : isPast ? 'text-forensic' : 'text-[#4B5568]'
-                    }`}>
-                      {year}
-                    </div>
+                    <div className="h-4" aria-hidden="true" />
+                    <div className="text-xs font-mono font-bold text-[#A3C2D9]">{year}</div>
                     {isWarn && (
                       <div className="text-[10px] text-danger font-mono">⚠ FLAG</div>
                     )}
                     {year === caseReplayData.actualDiscoveryYear && (
                       <div className="text-[10px] text-caution font-mono">FOUND</div>
                     )}
-                  </button>
+                  </div>
                 )
               })}
             </div>
+            <input
+              aria-label="Replay year"
+              type="range"
+              min={0}
+              max={YEARS.length - 1}
+              step={1}
+              value={YEARS.indexOf(selectedYear)}
+              onChange={event => handleYearChange(YEARS[Number(event.target.value)])}
+              className={`replay-range ${isWarningYear ? 'replay-range-warning' : ''}`}
+              style={{ '--scrub-intensity': `${Math.max(0, 1 - Math.abs(selectedYear - caseReplayData.warningYear) / 2)}` } as React.CSSProperties}
+            />
           </div>
         </div>
 
@@ -267,7 +281,7 @@ export default function CaseReplayPage() {
 
               <div className="flex items-center gap-4 mb-4">
                 <div>
-                  <div className="text-xs text-[#4B5568] mb-1">Risk Score</div>
+                  <div className="text-xs text-[#56718A] mb-1">Risk Score</div>
                   <div className={`text-4xl font-bold font-mono ${
                     (yearData?.nirikshan?.riskScore || 0) > 75 ? 'text-danger' :
                     (yearData?.nirikshan?.riskScore || 0) > 50 ? 'text-caution' : 'text-forensic'
@@ -276,7 +290,7 @@ export default function CaseReplayPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-[#4B5568] mb-1">Would Flag?</div>
+                  <div className="text-xs text-[#56718A] mb-1">Would Flag?</div>
                   <div className={`text-sm font-semibold font-mono ${yearData?.nirikshan?.wouldFlag ? 'text-danger' : 'text-forensic'}`}>
                     {yearData?.nirikshan?.wouldFlag ? '🚨 YES' : '✓ NO'}
                   </div>
@@ -284,7 +298,7 @@ export default function CaseReplayPage() {
               </div>
 
               <div className="space-y-2">
-                <div className="text-xs text-[#4B5568] font-mono mb-1.5">INDICATORS VISIBLE</div>
+                <div className="text-xs text-[#56718A] font-mono mb-1.5">INDICATORS VISIBLE</div>
                 {yearData?.nirikshan?.indicators.map((ind, i) => (
                   <motion.div
                     key={i}
@@ -294,7 +308,7 @@ export default function CaseReplayPage() {
                     className="flex items-center gap-2 text-xs"
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-saffron flex-shrink-0" />
-                    <span className="text-[#A8B3CF]">{ind}</span>
+                    <span className="text-[#A3C2D9]">{ind}</span>
                   </motion.div>
                 ))}
               </div>
@@ -303,18 +317,18 @@ export default function CaseReplayPage() {
             {/* Actual Reality */}
             <div className="glass rounded-2xl border border-white/5 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 rounded-full bg-[#6B7A99]" />
-                <span className="text-xs font-mono text-[#6B7A99]">WHAT ACTUALLY HAPPENED IN {selectedYear}</span>
+                <div className="w-2 h-2 rounded-full bg-[#7E9BB4]" />
+                <span className="text-xs font-mono text-[#7E9BB4]">WHAT ACTUALLY HAPPENED IN {selectedYear}</span>
               </div>
-              <p className="text-[#A8B3CF] text-sm leading-relaxed">{yearData?.actual}</p>
+              <p className="text-[#A3C2D9] text-sm leading-relaxed">{yearData?.actual}</p>
 
               <div className="mt-5 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
                 <div>
-                  <div className="text-xs text-[#4B5568]">New Projects</div>
-                  <div className="text-lg font-bold font-mono text-white">{yearData?.projectsCreated}</div>
+                  <div className="text-xs text-[#56718A]">New Projects</div>
+                  <div className="text-lg font-bold font-mono text-[#EAF7FF]">{yearData?.projectsCreated}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-[#4B5568]">Anomalies Visible</div>
+                  <div className="text-xs text-[#56718A]">Anomalies Visible</div>
                   <div className="text-lg font-bold font-mono text-caution">{yearData?.anomaliesVisible}</div>
                 </div>
               </div>
@@ -332,16 +346,16 @@ export default function CaseReplayPage() {
         <div className="glass rounded-2xl border border-white/5 p-6">
           <div className="flex items-center gap-2 mb-6">
             <BarChart2 size={14} className="text-saffron" />
-            <h2 className="font-semibold text-white text-sm">Why Was This Flagged? — Score Breakdown</h2>
+            <h2 className="font-semibold text-[#EAF7FF] text-sm">Why Was This Flagged? — Score Breakdown</h2>
             <span className="ml-auto font-mono font-bold text-danger text-lg">{caseReplayData.totalScore}</span>
           </div>
 
           <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={caseReplayData.scoreBreakdown} layout="vertical" barCategoryGap={8}>
-                <XAxis type="number" tick={{ fill: '#4B5568', fontSize: 10, fontFamily: 'JetBrains Mono' }} />
+                <XAxis type="number" tick={{ fill: '#56718A', fontSize: 10, fontFamily: 'JetBrains Mono' }} />
                 <YAxis dataKey="factor" type="category" width={160}
-                  tick={{ fill: '#A8B3CF', fontSize: 11, fontFamily: 'JetBrains Mono' }} />
+                  tick={{ fill: '#A3C2D9', fontSize: 11, fontFamily: 'JetBrains Mono' }} />
                 <Tooltip content={<BarTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
                 <Bar dataKey="contribution" radius={[0, 4, 4, 0]}>
                   {caseReplayData.scoreBreakdown.map((entry, i) => (
@@ -355,7 +369,7 @@ export default function CaseReplayPage() {
 
         {/* ── Dual Timeline Comparison ──────────────────────── */}
         <div className="glass rounded-2xl border border-white/5 p-6">
-          <h2 className="font-semibold text-white text-sm mb-6">Timeline Comparison: NIRIKSHAN vs Reality</h2>
+          <h2 className="font-semibold text-[#EAF7FF] text-sm mb-6">Timeline Comparison: NIRIKSHAN vs Reality</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {/* NIRIKSHAN Timeline */}
             <div>
@@ -372,8 +386,8 @@ export default function CaseReplayPage() {
                     {i < 3 && <div className="w-px flex-1 bg-saffron/20 my-1" />}
                   </div>
                   <div>
-                    <div className="text-xs font-mono text-[#4B5568]">{item.year}</div>
-                    <div className={`text-xs mt-0.5 ${item.highlight ? 'text-danger font-semibold' : 'text-[#A8B3CF]'}`}>{item.text}</div>
+                    <div className="text-xs font-mono text-[#56718A]">{item.year}</div>
+                    <div className={`text-xs mt-0.5 ${item.highlight ? 'text-danger font-semibold' : 'text-[#A3C2D9]'}`}>{item.text}</div>
                   </div>
                 </div>
               ))}
@@ -381,7 +395,7 @@ export default function CaseReplayPage() {
 
             {/* Actual Timeline */}
             <div>
-              <div className="text-xs font-mono text-[#6B7A99] mb-4">WHAT ACTUALLY HAPPENED...</div>
+              <div className="text-xs font-mono text-[#7E9BB4] mb-4">WHAT ACTUALLY HAPPENED...</div>
               {[
                 { year: '2017', text: 'Projects sanctioned. No investigation.' },
                 { year: '2018', text: 'Projects marked complete. Payments released.' },
@@ -394,8 +408,8 @@ export default function CaseReplayPage() {
                     {i < 3 && <div className="w-px flex-1 bg-white/10 my-1" />}
                   </div>
                   <div>
-                    <div className="text-xs font-mono text-[#4B5568]">{item.year}</div>
-                    <div className={`text-xs mt-0.5 ${item.highlight ? 'text-caution' : 'text-[#6B7A99]'}`}>{item.text}</div>
+                    <div className="text-xs font-mono text-[#56718A]">{item.year}</div>
+                    <div className={`text-xs mt-0.5 ${item.highlight ? 'text-caution' : 'text-[#7E9BB4]'}`}>{item.text}</div>
                   </div>
                 </div>
               ))}
@@ -403,9 +417,9 @@ export default function CaseReplayPage() {
           </div>
 
           <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-4 text-sm">
-            <span className="text-[#6B7A99]">Time saved by early detection:</span>
+            <span className="text-[#7E9BB4]">Time saved by early detection:</span>
             <span className="text-forensic font-bold font-mono text-xl">{caseReplayData.timeSaved}</span>
-            <span className="text-[#6B7A99] ml-4">Funds potentially recovered:</span>
+            <span className="text-[#7E9BB4] ml-4">Funds potentially recovered:</span>
             <span className="text-forensic font-bold font-mono text-xl">₹3.2 Cr</span>
           </div>
         </div>

@@ -15,14 +15,14 @@ function EvidenceItem({ item, type, index }: {
   const isFor = type === 'for'
   const color = isFor ? 'text-danger' : 'text-forensic'
   const bg = isFor ? 'bg-danger/5 border-danger/15 hover:border-danger/30' : 'bg-forensic/5 border-forensic/15 hover:border-forensic/30'
-  const barColor = isFor ? '#FF3B5C' : '#4FFFB0'
+  const barColor = isFor ? '#FF4D6D' : '#35F0C8'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07 }}
-      className={`p-3.5 rounded-xl border transition-all duration-200 ${bg}`}
+      className={`px-4 py-3.5 rounded-xl border transition-all duration-200 ${bg}`}
     >
       <div className="flex items-start gap-3">
         <div className="mt-0.5">
@@ -32,9 +32,9 @@ function EvidenceItem({ item, type, index }: {
           }
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-[#A8B3CF] leading-snug">{item.text}</p>
+          <p className="text-sm text-[#A3C2D9] leading-snug">{item.text}</p>
           <div className="flex items-center justify-between mt-2">
-            <span className="text-xs text-[#4B5568] font-mono">{item.source}</span>
+            <span className="text-xs text-[#56718A] font-mono">{item.source}</span>
             <div className="flex items-center gap-1.5">
               <div className="w-16 h-1 bg-white/8 rounded-full overflow-hidden">
                 <motion.div
@@ -55,41 +55,50 @@ function EvidenceItem({ item, type, index }: {
 }
 
 // ── Scales Visual ─────────────────────────────────────────────────
-function ForensicScales({ forTotal, againstTotal }: { forTotal: number; againstTotal: number }) {
-  const total = forTotal + againstTotal
-  const forPct = (forTotal / total) * 100
-  const tiltDeg = ((forTotal - againstTotal) / total) * 25
+const SCALE_SPRING = { type: 'spring' as const, stiffness: 140, damping: 16, mass: 0.85 }
+
+function ForensicScales({ forTotal, againstTotal, counterApplied, counterShift }: {
+  forTotal: number
+  againstTotal: number
+  counterApplied: boolean
+  counterShift: number
+}) {
+  const effectiveFor = counterApplied ? forTotal - counterShift : forTotal
+  const effectiveAgainst = counterApplied ? againstTotal + counterShift : againstTotal
+  const total = effectiveFor + effectiveAgainst
+  const tiltDeg = total > 0 ? ((effectiveFor - effectiveAgainst) / total) * 25 : 0
+  const panOffset = Math.min(Math.abs(tiltDeg) * 0.6, 14)
 
   return (
     <div className="flex flex-col items-center gap-2">
       {/* Balance beam */}
       <motion.div
         animate={{ rotate: tiltDeg }}
-        transition={{ duration: 1, delay: 0.5, type: 'spring', stiffness: 80 }}
-        className="relative"
+        transition={SCALE_SPRING}
+        className="relative origin-center"
         style={{ width: 200, height: 8 }}
       >
         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-danger via-white/20 to-forensic" />
         {/* Left pan */}
         <motion.div
-          animate={{ y: tiltDeg > 0 ? 12 : -12 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          animate={{ y: tiltDeg > 0 ? panOffset : -panOffset }}
+          transition={SCALE_SPRING}
           className="absolute -left-8 -top-6 w-16 h-6 rounded-lg bg-danger/20 border border-danger/30 flex items-center justify-center"
         >
-          <span className="text-xs font-mono text-danger font-bold">{forTotal}</span>
+          <span className="text-xs font-mono text-danger font-bold">{effectiveFor}</span>
         </motion.div>
         {/* Right pan */}
         <motion.div
-          animate={{ y: tiltDeg > 0 ? -12 : 12 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          animate={{ y: tiltDeg > 0 ? -panOffset : panOffset }}
+          transition={SCALE_SPRING}
           className="absolute -right-8 -top-6 w-16 h-6 rounded-lg bg-forensic/20 border border-forensic/30 flex items-center justify-center"
         >
-          <span className="text-xs font-mono text-forensic font-bold">{againstTotal}</span>
+          <span className="text-xs font-mono text-forensic font-bold">{effectiveAgainst}</span>
         </motion.div>
         {/* Center pivot */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white/20 border border-white/30" />
       </motion.div>
-      <div className="text-xs text-[#4B5568] font-mono mt-4">Evidence Balance</div>
+      <div className="text-xs text-[#56718A] font-mono mt-4">Evidence Balance</div>
     </div>
   )
 }
@@ -101,11 +110,12 @@ export default function ForensicReasoningPage() {
 
   const forTotal = evidenceFor.reduce((sum, e) => sum + e.weight, 0)
   const againstTotal = evidenceAgainst.reduce((sum, e) => sum + e.weight, 0)
+  const counterShift = riskScore - adjustedRiskScore
   const displayScore = counterApplied ? adjustedRiskScore : riskScore
 
   return (
     <OfficialLayout activeHref="/official/forensic-reasoning">
-      <div className="p-6 lg:p-8 space-y-8">
+      <div className="px-8 lg:px-12 xl:px-14 py-6 lg:py-8 space-y-8">
 
         {/* Header */}
         <div>
@@ -114,20 +124,20 @@ export default function ForensicReasoningPage() {
             <span className="text-xs font-mono text-caution tracking-widest">FORENSIC REASONING CENTER</span>
           </div>
           <h1 className="font-display font-bold text-white text-3xl mb-1">Forensic Case Analysis</h1>
-          <p className="text-[#6B7A99] text-sm">Building the case — and actively trying to disprove it</p>
+          <p className="text-[#7E9BB4] text-sm">Building the case — and actively trying to disprove it</p>
         </div>
 
         {/* Score + Scales row */}
         <div className="grid md:grid-cols-3 gap-6">
           {/* Risk Score */}
-          <div className="glass rounded-2xl border border-white/5 p-6 flex flex-col items-center gap-4">
-            <div className="text-xs font-mono text-[#4B5568] tracking-widest">OVERALL RISK SCORE</div>
+          <div className="glass rounded-2xl border border-white/5 px-6 lg:px-7 py-6 flex flex-col items-center gap-4">
+            <div className="text-xs font-mono text-[#56718A] tracking-widest">OVERALL RISK SCORE</div>
             <motion.div
               key={displayScore}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="text-7xl font-bold font-mono"
-              style={{ color: displayScore > 75 ? '#FF3B5C' : displayScore > 50 ? '#FFD60A' : '#4FFFB0' }}
+              style={{ color: displayScore > 75 ? '#FF4D6D' : displayScore > 50 ? '#FFC94D' : '#35F0C8' }}
             >
               {displayScore}
             </motion.div>
@@ -142,8 +152,13 @@ export default function ForensicReasoningPage() {
           </div>
 
           {/* Scales */}
-          <div className="glass rounded-2xl border border-white/5 p-6 flex flex-col items-center justify-center">
-            <ForensicScales forTotal={forTotal} againstTotal={againstTotal} />
+          <div className="glass rounded-2xl border border-white/5 px-6 lg:px-7 py-6 flex flex-col items-center justify-center">
+            <ForensicScales
+              forTotal={forTotal}
+              againstTotal={againstTotal}
+              counterApplied={counterApplied}
+              counterShift={counterShift}
+            />
             <div className="flex items-center gap-6 mt-6 text-xs font-mono">
               <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-danger" /> FOR ({forTotal} pts)</div>
               <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-forensic" /> AGAINST ({againstTotal} pts)</div>
@@ -151,17 +166,17 @@ export default function ForensicReasoningPage() {
           </div>
 
           {/* Counter-Evidence Engine */}
-          <div className="glass rounded-2xl border border-caution/20 bg-caution/3 p-6">
+          <div className="glass rounded-2xl border border-caution/20 bg-caution/3 px-6 lg:px-7 py-6">
             <div className="flex items-center gap-2 mb-4">
               <Shield size={16} className="text-caution" />
               <h3 className="font-semibold text-white text-sm">Counter-Evidence Engine</h3>
             </div>
-            <p className="text-xs text-[#A8B3CF] mb-4">
+            <p className="text-xs text-[#A3C2D9] mb-4">
               The AI asks: <em className="text-caution">"What if I'm wrong?"</em> Legitimate explanations found:
             </p>
             <div className="space-y-2 mb-5">
               {counterEvidenceReasons.map((r, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-[#A8B3CF]">
+                <div key={i} className="flex items-start gap-2 text-xs text-[#A3C2D9]">
                   <Minus size={10} className="text-caution mt-0.5 flex-shrink-0" />
                   {r}
                 </div>
@@ -206,14 +221,14 @@ export default function ForensicReasoningPage() {
 
             {/* Alternative Explanations */}
             <div className="mt-2">
-              <div className="text-xs text-[#4B5568] font-mono uppercase tracking-widest mb-2">Alternative Explanations</div>
+              <div className="text-xs text-[#56718A] font-mono uppercase tracking-widest mb-2">Alternative Explanations</div>
               {alternativeExplanations.map((exp, i) => (
                 <div key={i}
                   className="flex items-start gap-2 p-2.5 rounded-lg hover:bg-white/3 cursor-pointer transition-colors"
                   onClick={() => setExpandedAlternative(expandedAlternative === i ? null : i)}
                 >
-                  <ChevronRight size={12} className="text-[#4B5568] mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-[#6B7A99]">{exp}</p>
+                  <ChevronRight size={12} className="text-[#56718A] mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-[#7E9BB4]">{exp}</p>
                 </div>
               ))}
             </div>
@@ -225,7 +240,7 @@ export default function ForensicReasoningPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="glass rounded-2xl border border-saffron/25 bg-saffron/5 p-6"
+          className="glass rounded-2xl border border-saffron/25 bg-saffron/5 px-6 lg:px-8 py-6"
         >
           <div className="flex items-start gap-4">
             <div className="p-2.5 rounded-xl bg-saffron/15 border border-saffron/25 flex-shrink-0">
@@ -233,12 +248,12 @@ export default function ForensicReasoningPage() {
             </div>
             <div>
               <h3 className="font-display font-bold text-white text-lg mb-1">Recommended Investigation</h3>
-              <p className="text-[#A8B3CF] text-sm leading-relaxed">{recommendedAction}</p>
+              <p className="text-[#A3C2D9] text-sm leading-relaxed">{recommendedAction}</p>
               <div className="flex gap-3 mt-4">
                 <button className="px-4 py-2 rounded-xl bg-saffron text-white text-sm font-semibold hover:bg-saffron-light transition-colors">
                   Create Investigation Task
                 </button>
-                <button className="px-4 py-2 rounded-xl border border-white/15 text-[#A8B3CF] text-sm hover:bg-white/5 transition-colors">
+                <button className="px-4 py-2 rounded-xl border border-white/15 text-[#A3C2D9] text-sm hover:bg-white/5 transition-colors">
                   Generate Case Dossier
                 </button>
               </div>

@@ -27,7 +27,7 @@ const statusColor: Record<CheckStatus, string> = {
 
 // ── Evidence Integrity Gauge ─────────────────────────────────────
 function IntegrityGauge({ score }: { score: number }) {
-  const color = score > 70 ? '#4FFFB0' : score > 40 ? '#FFD60A' : '#FF3B5C'
+  const color = score > 70 ? '#35F0C8' : score > 40 ? '#FFC94D' : '#FF4D6D'
   const circumference = 2 * Math.PI * 52
   const dashoffset = circumference - (circumference * score / 100)
 
@@ -53,7 +53,7 @@ function IntegrityGauge({ score }: { score: number }) {
           >
             {score}
           </motion.div>
-          <div className="text-xs text-[#6B7A99] font-mono">/ 100</div>
+          <div className="text-xs text-[#7E9BB4] font-mono">/ 100</div>
         </div>
       </div>
       <div className="text-center">
@@ -78,7 +78,7 @@ function TimelineFeasibility({ data }: { data: typeof evidenceVerificationData.t
       {/* Reported */}
       <div className="space-y-1">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-[#A8B3CF]">Reported construction time</span>
+          <span className="text-[#A3C2D9]">Reported construction time</span>
           <span className="text-danger font-mono font-bold">{reportedDays} days</span>
         </div>
         <div className="bg-white/5 rounded-full h-3 overflow-hidden">
@@ -87,7 +87,7 @@ function TimelineFeasibility({ data }: { data: typeof evidenceVerificationData.t
             animate={{ width: `${(reportedDays / scale) * 100}%` }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="h-full bg-danger rounded-full"
-            style={{ boxShadow: '0 0 8px rgba(255,59,92,0.6)' }}
+            style={{ boxShadow: '0 0 8px rgba(255,77,109,0.6)' }}
           />
         </div>
       </div>
@@ -95,23 +95,23 @@ function TimelineFeasibility({ data }: { data: typeof evidenceVerificationData.t
       {/* Expected range */}
       <div className="space-y-1">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-[#A8B3CF]">Expected range</span>
+          <span className="text-[#A3C2D9]">Expected range</span>
           <span className="text-forensic font-mono">{expectedMin}–{expectedMax} days</span>
         </div>
         <div className="bg-white/5 rounded-full h-3 relative overflow-hidden">
           <motion.div
-            initial={{ width: 0, marginLeft: `${(expectedMin / scale) * 100}%` }}
-            animate={{ width: `${((expectedMax - expectedMin) / scale) * 100}%`, marginLeft: `${(expectedMin / scale) * 100}%` }}
+            initial={{ width: 0, left: `${(expectedMin / scale) * 100}%` }}
+            animate={{ width: `${((expectedMax - expectedMin) / scale) * 100}%`, left: `${(expectedMin / scale) * 100}%` }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="h-full bg-forensic/40 rounded-full absolute"
-            style={{ border: '1px solid rgba(79,255,176,0.4)' }}
+            className="h-full bg-forensic/40 rounded-full absolute top-0"
+            style={{ border: '1px solid rgba(53,240,200,0.4)' }}
           />
         </div>
       </div>
 
       <div className="glass rounded-xl border border-danger/20 p-3 mt-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-[#A8B3CF]">Timeline Feasibility</span>
+          <span className="text-xs text-[#A3C2D9]">Timeline Feasibility</span>
           <span className="text-danger font-mono font-bold text-lg">{feasibilityPercent}%</span>
         </div>
         <div className="text-xs text-danger mt-1">
@@ -133,7 +133,7 @@ export default function EvidenceVerificationPage() {
 
   return (
     <OfficialLayout activeHref="/official/evidence-verification">
-      <div className="p-6 lg:p-8 space-y-8">
+      <div className="px-8 lg:px-12 xl:px-14 py-6 lg:py-8 space-y-8">
 
         {/* Header */}
         <div>
@@ -142,7 +142,7 @@ export default function EvidenceVerificationPage() {
             <span className="text-xs font-mono text-forensic tracking-widest">EVIDENCE VERIFICATION LAB</span>
           </div>
           <h1 className="font-display font-bold text-white text-3xl mb-1">Multi-Modal Evidence Analysis</h1>
-          <p className="text-[#6B7A99] text-sm">GPS · Timestamps · Image Similarity · Solar Verification · Document Consistency</p>
+          <p className="text-[#7E9BB4] text-sm">GPS · Timestamps · Image Similarity · Solar Verification · Document Consistency</p>
         </div>
 
         {/* Main Grid */}
@@ -150,7 +150,7 @@ export default function EvidenceVerificationPage() {
 
           {/* Evidence Checklist */}
           <div className="lg:col-span-2 glass rounded-2xl border border-white/5 overflow-hidden">
-            <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
+            <div className="px-6 lg:px-7 py-4 border-b border-white/5 flex items-center justify-between">
               <h2 className="font-semibold text-white text-sm">Evidence Checklist</h2>
               <button
                 onClick={() => setRevealed(!revealed)}
@@ -160,7 +160,7 @@ export default function EvidenceVerificationPage() {
               </button>
             </div>
 
-            <div className="p-4 space-y-2">
+            <div className="px-5 lg:px-6 py-4 space-y-2">
               {checks.map((check, i) => (
                 <motion.div
                   key={check.id}
@@ -170,7 +170,7 @@ export default function EvidenceVerificationPage() {
                 >
                   <button
                     onClick={() => toggleExpand(check.id)}
-                    className={`w-full flex items-center gap-3 p-3.5 rounded-xl border transition-all duration-200 text-left
+                    className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all duration-200 text-left
                       ${expandedId === check.id || revealed
                         ? statusColor[check.status as CheckStatus]
                         : 'border-white/5 hover:border-white/12 bg-white/2'}`}
@@ -198,7 +198,7 @@ export default function EvidenceVerificationPage() {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="text-xs text-[#A8B3CF] mt-1.5 leading-relaxed overflow-hidden"
+                            className="text-xs text-[#A3C2D9] mt-1.5 leading-relaxed overflow-hidden"
                           >
                             {check.detail}
                           </motion.p>
@@ -207,8 +207,8 @@ export default function EvidenceVerificationPage() {
                     </div>
 
                     {expandedId === check.id
-                      ? <ChevronUp size={14} className="text-[#6B7A99] flex-shrink-0" />
-                      : <ChevronDown size={14} className="text-[#6B7A99] flex-shrink-0" />
+                      ? <ChevronUp size={14} className="text-[#7E9BB4] flex-shrink-0" />
+                      : <ChevronDown size={14} className="text-[#7E9BB4] flex-shrink-0" />
                     }
                   </button>
                 </motion.div>
@@ -219,14 +219,14 @@ export default function EvidenceVerificationPage() {
           {/* Right Column */}
           <div className="space-y-6">
             {/* Integrity Gauge */}
-            <div className="glass rounded-2xl border border-white/5 p-6 flex flex-col items-center">
+            <div className="glass rounded-2xl border border-white/5 px-6 lg:px-7 py-6 flex flex-col items-center">
               <IntegrityGauge score={consistencyScore} />
             </div>
 
             {/* Summary */}
-            <div className="glass rounded-2xl border border-danger/15 bg-danger/3 p-5">
+            <div className="glass rounded-2xl border border-danger/15 bg-danger/3 px-6 lg:px-7 py-5">
               <div className="text-sm font-semibold text-white mb-3">NIRIKSHAN Assessment</div>
-              <p className="text-sm text-[#A8B3CF] leading-relaxed">
+              <p className="text-sm text-[#A3C2D9] leading-relaxed">
                 Evidence is <strong className="text-danger">inconsistent and requires verification</strong>.
                 Multiple indicators suggest photographic evidence may not represent actual project progress.
               </p>
@@ -240,25 +240,25 @@ export default function EvidenceVerificationPage() {
         </div>
 
         {/* Timeline Feasibility */}
-        <div className="glass rounded-2xl border border-white/5 p-6">
+        <div className="glass rounded-2xl border border-white/5 px-6 lg:px-7 py-6">
           <TimelineFeasibility data={timelineFeasibility} />
         </div>
 
         {/* Solar/Shadow Verification Teaser */}
-        <div className="glass rounded-2xl border border-caution/20 bg-caution/3 p-6">
+        <div className="glass rounded-2xl border border-caution/20 bg-caution/3 px-6 lg:px-8 py-6">
           <div className="flex items-start gap-4">
             <div className="p-3 rounded-xl bg-caution/10 border border-caution/20 flex-shrink-0">
               <span className="text-2xl">☀️</span>
             </div>
             <div>
               <h3 className="font-display font-bold text-white text-lg mb-1">Solar & Shadow Verification</h3>
-              <p className="text-[#A8B3CF] text-sm mb-3">
+              <p className="text-[#A3C2D9] text-sm mb-3">
                 Using claimed GPS location (25.3176°N, 82.9739°E) and claimed capture time (14:30 IST), the expected sun azimuth is 231° and elevation 52°.
                 Shadow direction in photograph is inconsistent with this geometry.
               </p>
               <div className="flex gap-4 text-xs font-mono">
-                <span className="text-[#6B7A99]">Expected azimuth: <span className="text-white">231°</span></span>
-                <span className="text-[#6B7A99]">Shadow in photo: <span className="text-caution">≈ 180°</span></span>
+                <span className="text-[#7E9BB4]">Expected azimuth: <span className="text-white">231°</span></span>
+                <span className="text-[#7E9BB4]">Shadow in photo: <span className="text-caution">≈ 180°</span></span>
                 <span className="text-caution font-bold">⚠ INCONSISTENT</span>
               </div>
             </div>

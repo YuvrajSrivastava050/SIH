@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Shield, Eye, Users, Lock, Zap } from 'lucide-react'
+import TerrainBackground from '@/components/TerrainBackground'
 
 const roles = [
   {
@@ -77,30 +78,24 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#04070F] flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-[#020A12] flex flex-col relative overflow-hidden">
 
-      {/* Background */}
+      {/* Interactive terrain backdrop */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-saffron/4 rounded-full blur-[150px]" />
-        <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[300px] bg-blue-600/4 rounded-full blur-[100px]" />
-        {/* Grid */}
-        <div className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,107,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,0,0.03) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
+        <TerrainBackground variant="full" tilt density={0.7} className="absolute inset-0" />
+        {/* readability veil */}
+        <div className="absolute inset-0 bg-[#020A12]/55" />
       </div>
 
       {/* Nav */}
       <div className="relative z-10 px-6 py-5 flex items-center justify-between border-b border-white/5">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center">
-            <span className="text-white font-bold text-xs font-mono">N</span>
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-saffron to-forensic flex items-center justify-center shadow-[0_0_14px_rgba(62,214,255,0.3)]">
+            <span className="text-[#02141d] font-bold text-xs font-mono">N</span>
           </div>
           <span className="font-display font-bold text-white">NIRIKSHAN</span>
         </Link>
-        <div className="flex items-center gap-2 text-xs text-[#4B5568] font-mono">
+        <div className="flex items-center gap-2 text-xs text-[#56718A] font-mono">
           <Lock size={10} />
           SECURE ACCESS PORTAL
         </div>
@@ -121,7 +116,7 @@ export default function LoginPage() {
           <h1 className="font-display font-bold text-white text-4xl mb-3">
             Choose Your Interface
           </h1>
-          <p className="text-[#6B7A99] text-lg max-w-xl mx-auto">
+          <p className="text-[#7E9BB4] text-lg max-w-xl mx-auto">
             NIRIKSHAN serves three stakeholders, each with a purpose-built view of the same intelligence.
           </p>
         </motion.div>
@@ -183,13 +178,13 @@ export default function LoginPage() {
                     <h3 className="font-display font-bold text-white text-xl">{role.title}</h3>
                   </div>
 
-                  <p className="text-[#A8B3CF] text-sm leading-relaxed">{role.description}</p>
+                  <p className="text-[#A3C2D9] text-sm leading-relaxed">{role.description}</p>
 
                   <div className="flex flex-col gap-1.5">
                     {role.features.map((f, j) => (
-                      <div key={j} className="flex items-center gap-2 text-xs text-[#6B7A99]">
+                      <div key={j} className="flex items-center gap-2 text-xs text-[#7E9BB4]">
                         <div className={`w-1 h-1 rounded-full ${isSelected ? role.accentBg.replace('bg-', 'bg-').replace('/10', '') : 'bg-white/20'}`}
-                          style={{ backgroundColor: isSelected ? undefined : '#374151' }}
+                          style={{ backgroundColor: isSelected ? undefined : '#3D5468' }}
                         />
                         {f}
                       </div>
@@ -211,8 +206,8 @@ export default function LoginPage() {
               transition={{ duration: 0.3 }}
               onClick={handleEnter}
               disabled={loading}
-              className="group flex items-center gap-3 px-10 py-4 rounded-2xl bg-saffron text-white font-semibold text-lg
-                hover:bg-saffron-light transition-all duration-300 shadow-saffron hover:shadow-[0_0_40px_rgba(255,107,0,0.4)]
+              className="group flex items-center gap-3 px-10 py-4 rounded-2xl bg-saffron text-[#02141d] font-semibold text-lg
+                hover:bg-saffron-light transition-all duration-300 shadow-[0_0_36px_rgba(62,214,255,0.35)] hover:shadow-[0_0_52px_rgba(62,214,255,0.5)]
                 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
@@ -231,13 +226,13 @@ export default function LoginPage() {
         </AnimatePresence>
 
         {!selectedRole && (
-          <p className="text-xs text-[#4B5568] font-mono mt-2">← Select a role to continue</p>
+          <p className="text-xs text-[#56718A] font-mono mt-2">← Select a role to continue</p>
         )}
       </div>
 
       {/* Footer */}
-      <div className="relative z-10 px-6 py-4 border-t border-white/5 flex items-center justify-center">
-        <p className="text-xs text-[#4B5568] font-mono">
+      <div className="relative z-10 px-6 py-4 border-t border-sky-400/8 flex items-center justify-center">
+        <p className="text-xs text-[#56718A] font-mono">
           For SIH 2026 demonstration purposes · All data is synthetic
         </p>
       </div>

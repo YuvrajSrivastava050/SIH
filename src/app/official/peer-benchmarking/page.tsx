@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { BarChart2, TrendingUp, Globe, MapPin, User } from 'lucide-react'
+import { BarChart2, TrendingUp } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine, Cell, RadarChart,
+  ResponsiveContainer, Cell, RadarChart,
   Radar, PolarGrid, PolarAngleAxis
 } from 'recharts'
 import { peerBenchmarkData } from '@/lib/mock-data'
@@ -19,14 +19,14 @@ const metrics = [
 
 const PercentileBadge = ({ value, label }: { value: number; label: string }) => (
   <div className={`glass rounded-xl p-3 border text-center ${
-    value > 90 ? 'border-danger/30 bg-danger/5' :
+    value > 90 ? 'border-[#2D8DBB]/60 bg-[#071A29]/80 shadow-[0_0_18px_rgba(45,141,187,0.18)]' :
     value > 70 ? 'border-caution/30 bg-caution/5' :
     'border-forensic/30 bg-forensic/5'
   }`}>
     <div className={`text-2xl font-bold font-mono ${
-      value > 90 ? 'text-danger' : value > 70 ? 'text-caution' : 'text-forensic'
+      value > 90 ? 'text-[#57C7F2] drop-shadow-[0_0_8px_rgba(87,199,242,0.45)]' : value > 70 ? 'text-caution' : 'text-forensic'
     }`}>{value}th</div>
-    <div className="text-xs text-[#6B7A99] mt-1">{label}</div>
+    <div className="text-xs text-[#7E9BB4] mt-1">{label}</div>
   </div>
 )
 
@@ -35,9 +35,9 @@ export default function PeerBenchmarkingPage() {
   const metricData = peerBenchmarkData.metrics[activeMetric as keyof typeof peerBenchmarkData.metrics]
 
   const barData = [
-    { name: 'This Project', value: metricData.project, color: '#FF6B00', highlight: true },
+    { name: 'This Project', value: metricData.project, color: '#3ED6FF', highlight: true },
     { name: 'National Avg', value: metricData.nationalPeer, color: '#3B82F6' },
-    { name: 'Local Avg', value: metricData.localPeer, color: '#9333EA' },
+    { name: 'Local Avg', value: metricData.localPeer, color: '#6E8BFF' },
     { name: 'Contractor Avg', value: metricData.contractorAvg, color: '#6B7280' },
   ]
 
@@ -55,8 +55,8 @@ export default function PeerBenchmarkingPage() {
             <BarChart2 size={16} className="text-blue-400" />
             <span className="text-xs font-mono text-blue-400 tracking-widest">ADAPTIVE PEER BENCHMARKING</span>
           </div>
-          <h1 className="font-display font-bold text-white text-3xl mb-1">Peer Intelligence</h1>
-          <p className="text-[#6B7A99] text-sm">Is this project actually abnormal — compared to its true peers?</p>
+          <h1 className="font-mono font-bold text-[#57C7F2] text-3xl mb-1 drop-shadow-[0_0_8px_rgba(87,199,242,0.45)]">Peer Intelligence</h1>
+          <p className="text-[#7E9BB4] text-sm">Is this project actually abnormal — compared to its true peers?</p>
         </div>
 
         {/* Convergence Banner */}
@@ -66,10 +66,10 @@ export default function PeerBenchmarkingPage() {
             animate={{ opacity: 1, y: 0 }}
             className="glass rounded-2xl border border-danger/25 bg-danger/5 p-5 flex items-center gap-4"
           >
-            <TrendingUp size={24} className="text-danger flex-shrink-0" />
+            <TrendingUp size={24} className="text-[#57C7F2] drop-shadow-[0_0_8px_rgba(87,199,242,0.45)] flex-shrink-0" />
             <div>
-              <div className="font-semibold text-danger text-lg">Multi-Benchmark Convergence Detected</div>
-              <p className="text-sm text-[#A8B3CF] mt-0.5">
+              <div className="font-semibold text-[#57C7F2] text-lg drop-shadow-[0_0_8px_rgba(87,199,242,0.35)]">Multi-Benchmark Convergence Detected</div>
+              <p className="text-sm text-[#A3C2D9] mt-0.5">
                 National, local, AND contractor benchmarks all independently flag this project as anomalous.
                 This convergence significantly strengthens the investigation signal.
               </p>
@@ -92,7 +92,7 @@ export default function PeerBenchmarkingPage() {
                 className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
                   activeMetric === m.key
                     ? 'bg-saffron/15 border border-saffron/30 text-saffron'
-                    : 'text-[#6B7A99] hover:text-white border border-transparent hover:border-white/10'
+                    : 'text-[#7E9BB4] hover:text-white border border-transparent hover:border-white/10'
                 }`}
               >
                 {m.label}
@@ -104,12 +104,13 @@ export default function PeerBenchmarkingPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData} barGap={8}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="name" tick={{ fill: '#6B7A99', fontSize: 11 }} />
-                <YAxis tick={{ fill: '#6B7A99', fontSize: 11, fontFamily: 'JetBrains Mono' }} />
+                <XAxis dataKey="name" tick={{ fill: '#7E9BB4', fontSize: 11 }} />
+                <YAxis tick={{ fill: '#7E9BB4', fontSize: 11, fontFamily: 'JetBrains Mono' }} />
                 <Tooltip
-                  contentStyle={{ background: '#080D1A', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12 }}
-                  labelStyle={{ color: '#F0F4FF' }}
-                  itemStyle={{ color: '#A8B3CF', fontFamily: 'JetBrains Mono' }}
+                  cursor={false}
+                  contentStyle={{ background: '#05141F', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, boxShadow: 'none' }}
+                  labelStyle={{ color: '#EAF7FF' }}
+                  itemStyle={{ color: '#A3C2D9', fontFamily: 'JetBrains Mono' }}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                   {barData.map((entry, i) => (
@@ -131,8 +132,8 @@ export default function PeerBenchmarkingPage() {
               <ResponsiveContainer>
                 <RadarChart data={radarData}>
                   <PolarGrid stroke="rgba(255,255,255,0.06)" />
-                  <PolarAngleAxis dataKey="dimension" tick={{ fill: '#6B7A99', fontSize: 11 }} />
-                  <Radar dataKey="score" stroke="#FF6B00" fill="rgba(255,107,0,0.15)" dot={{ r: 4, fill: '#FF6B00' }} />
+                  <PolarAngleAxis dataKey="dimension" tick={{ fill: '#7E9BB4', fontSize: 11 }} />
+                  <Radar dataKey="score" stroke="#3ED6FF" fill="rgba(62,214,255,0.15)" dot={{ r: 4, fill: '#3ED6FF' }} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
@@ -150,12 +151,12 @@ export default function PeerBenchmarkingPage() {
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 text-sm">
                   <span>{item.icon}</span>
-                  <span className="text-[#4B5568] w-28 flex-shrink-0">{item.label}</span>
-                  <span className="text-[#A8B3CF]">{item.value}</span>
+                  <span className="text-[#56718A] w-28 flex-shrink-0">{item.label}</span>
+                  <span className="text-[#A3C2D9]">{item.value}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-4 pt-3 border-t border-white/5 text-xs text-[#4B5568] font-mono">
+            <div className="mt-4 pt-3 border-t border-white/5 text-xs text-[#56718A] font-mono">
               Peer group: 847 similar projects nationally
             </div>
           </div>
