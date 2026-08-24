@@ -1,4 +1,1 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install --legacy-peer-deps"
-}
+{"installCommand": "npm install --legacy-peer-deps"}
