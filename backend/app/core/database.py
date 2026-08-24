@@ -1,0 +1,28 @@
+from typing import Generator
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
+from app.core.config import settings
+
+# For SQLite, enable check_same_thread=False for multi-threading in FastAPI
+connect_args = {"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(
+    settings.DATABASE_URL,
+    connect_args=connect_args,
+    echo=False
+)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+
+
+def get_db() -> Generator:
+    """
+    FastAPI dependency to yield database sessions per request.
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
